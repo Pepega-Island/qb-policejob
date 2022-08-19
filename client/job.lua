@@ -510,218 +510,217 @@ end)
 
 -- Threads
 
-if Config.UseTarget then
-    CreateThread(function()
-        -- Toggle Duty
-        for k, v in pairs(Config.Locations["duty"]) do
-            exports['qb-target']:AddBoxZone("PoliceDuty_"..k, vector3(v.x, v.y, v.z), 1, 1, {
-                name = "PoliceDuty_"..k,
-                heading = 11,
-                debugPoly = false,
-                minZ = v.z - 1,
-                maxZ = v.z + 1,
-            }, {
-                options = {
-                    {
-                        type = "client",
-                        event = "qb-policejob:ToggleDuty",
-                        icon = "fas fa-sign-in-alt",
-                        label = "Sign In",
-                        job = "police",
-                    },
-                },
-                distance = 1.5
-            })
-        end
+-- if Config.UseTarget then
+--     CreateThread(function()
+--         -- Toggle Duty
+--         for k, v in pairs(Config.Locations["duty"]) do
+--             exports['qb-target']:AddBoxZone("PoliceDuty_"..k, vector3(v.x, v.y, v.z), 1, 1, {
+--                 name = "PoliceDuty_"..k,
+--                 heading = 11,
+--                 debugPoly = false,
+--                 minZ = v.z - 1,
+--                 maxZ = v.z + 1,
+--             }, {
+--                 options = {
+--                     {
+--                         type = "client",
+--                         event = "qb-policejob:ToggleDuty",
+--                         icon = "fas fa-sign-in-alt",
+--                         label = "Sign In",
+--                         job = "police",
+--                     },
+--                 },
+--                 distance = 1.5
+--             })
+--         end
 
-    end)
-
-else
+--     end)
+-- end
     -- Toggle Duty
-    local dutyZones = {}
-    for _, v in pairs(Config.Locations["duty"]) do
-        dutyZones[#dutyZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 1.75, 1, {
-            name="box_zone",
-            debugPoly = false,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        })
-    end
+    -- local dutyZones = {}
+    -- for _, v in pairs(Config.Locations["duty"]) do
+    --     dutyZones[#dutyZones+1] = BoxZone:Create(
+    --         vector3(vector3(v.x, v.y, v.z)), 1.75, 1, {
+    --         name="box_zone",
+    --         debugPoly = false,
+    --         minZ = v.z - 1,
+    --         maxZ = v.z + 1,
+    --     })
+    -- end
 
-    local dutyCombo = ComboZone:Create(dutyZones, {name = "dutyCombo", debugPoly = false})
-    dutyCombo:onPlayerInOut(function(isPointInside)
-        if isPointInside then
-            inDuty = true
-            if not onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.on_duty'),'left')
-            else
-                exports['qb-core']:DrawText(Lang:t('info.off_duty'),'left')
-            end
-        else
-            inDuty = false
-            exports['qb-core']:HideText()
-        end
-    end)
+    -- local dutyCombo = ComboZone:Create(dutyZones, {name = "dutyCombo", debugPoly = false})
+    -- dutyCombo:onPlayerInOut(function(isPointInside)
+    --     if isPointInside then
+    --         inDuty = true
+    --         if not onDuty then
+    --             exports['qb-core']:DrawText(Lang:t('info.on_duty'),'left')
+    --         else
+    --             exports['qb-core']:DrawText(Lang:t('info.off_duty'),'left')
+    --         end
+    --     else
+    --         inDuty = false
+    --         exports['qb-core']:HideText()
+    --     end
+    -- end)
 
     -- Toggle Duty Thread
-    CreateThread(function ()
-        Wait(1000)
-        while true do
-            local sleep = 1000
-            if inDuty and PlayerJob.name == "police" then
-                sleep = 5
-                if IsControlJustReleased(0, 38) then
-                    onDuty = not onDuty
-                    TriggerServerEvent("police:server:UpdateCurrentCops")
-                    TriggerServerEvent("QBCore:ToggleDuty")
-                    TriggerServerEvent("police:server:UpdateBlips")
-                end
-            end
-            Wait(sleep)
-        end
-    end)
-end
+--     CreateThread(function ()
+--         Wait(1000)
+--         while true do
+--             local sleep = 1000
+--             if inDuty and PlayerJob.name == "police" then
+--                 sleep = 5
+--                 if IsControlJustReleased(0, 38) then
+--                     onDuty = not onDuty
+--                     TriggerServerEvent("police:server:UpdateCurrentCops")
+--                     TriggerServerEvent("QBCore:ToggleDuty")
+--                     TriggerServerEvent("police:server:UpdateBlips")
+--                 end
+--             end
+--             Wait(sleep)
+--         end
+--     end)
+-- end
 
-CreateThread(function()
-    -- Evidence Storage
-    local evidenceZones = {}
-    for _, v in pairs(Config.Locations["evidence"]) do
-        evidenceZones[#evidenceZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 2, 1, {
-            name="box_zone",
-            debugPoly = false,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        })
-    end
+-- CreateThread(function()
+--     -- Evidence Storage
+--     local evidenceZones = {}
+--     for _, v in pairs(Config.Locations["evidence"]) do
+--         evidenceZones[#evidenceZones+1] = BoxZone:Create(
+--             vector3(vector3(v.x, v.y, v.z)), 2, 1, {
+--             name="box_zone",
+--             debugPoly = false,
+--             minZ = v.z - 1,
+--             maxZ = v.z + 1,
+--         })
+--     end
 
-    local evidenceCombo = ComboZone:Create(evidenceZones, {name = "evidenceCombo", debugPoly = false})
-    evidenceCombo:onPlayerInOut(function(isPointInside)
-        if isPointInside then
-            if PlayerJob.name == "police" and onDuty then
-                local currentEvidence = 0
-                local pos = GetEntityCoords(PlayerPedId())
+--     local evidenceCombo = ComboZone:Create(evidenceZones, {name = "evidenceCombo", debugPoly = false})
+--     evidenceCombo:onPlayerInOut(function(isPointInside)
+--         if isPointInside then
+--             if PlayerJob.name == "police" and onDuty then
+--                 local currentEvidence = 0
+--                 local pos = GetEntityCoords(PlayerPedId())
 
-                for k, v in pairs(Config.Locations["evidence"]) do
-                    if #(pos - v) < 2 then
-                        currentEvidence = k
-                    end
-                end
-                exports['qb-menu']:showHeader({
-                    {
-                        header = Lang:t('info.evidence_stash', {value = currentEvidence}),
-                        params = {
-                            event = 'police:client:EvidenceStashDrawer',
-                            args = {
-                                currentEvidence = currentEvidence
-                            }
-                        }
-                    }
-                })
-            end
-        else
-            exports['qb-menu']:closeMenu()
-        end
-    end)
+--                 for k, v in pairs(Config.Locations["evidence"]) do
+--                     if #(pos - v) < 2 then
+--                         currentEvidence = k
+--                     end
+--                 end
+--                 exports['qb-menu']:showHeader({
+--                     {
+--                         header = Lang:t('info.evidence_stash', {value = currentEvidence}),
+--                         params = {
+--                             event = 'police:client:EvidenceStashDrawer',
+--                             args = {
+--                                 currentEvidence = currentEvidence
+--                             }
+--                         }
+--                     }
+--                 })
+--             end
+--         else
+--             exports['qb-menu']:closeMenu()
+--         end
+--     end)
 
     -- Personal Stash
-    local stashZones = {}
-    for _, v in pairs(Config.Locations["stash"]) do
-        stashZones[#stashZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 1.5, 1.5, {
-            name="box_zone",
-            debugPoly = false,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        })
-    end
+    -- local stashZones = {}
+    -- for _, v in pairs(Config.Locations["stash"]) do
+    --     stashZones[#stashZones+1] = BoxZone:Create(
+    --         vector3(vector3(v.x, v.y, v.z)), 1.5, 1.5, {
+    --         name="box_zone",
+    --         debugPoly = false,
+    --         minZ = v.z - 1,
+    --         maxZ = v.z + 1,
+    --     })
+    -- end
 
-    local stashCombo = ComboZone:Create(stashZones, {name = "stashCombo", debugPoly = false})
-    stashCombo:onPlayerInOut(function(isPointInside, _, _)
-        if isPointInside then
-            inStash = true
-            exports['qb-core']:DrawText(Lang:t('info.stash_enter'), 'left')
-        else
-            exports['qb-core']:HideText()
-            inStash = false
-        end
-    end)
+    -- local stashCombo = ComboZone:Create(stashZones, {name = "stashCombo", debugPoly = false})
+    -- stashCombo:onPlayerInOut(function(isPointInside, _, _)
+    --     if isPointInside then
+    --         inStash = true
+    --         exports['qb-core']:DrawText(Lang:t('info.stash_enter'), 'left')
+    --     else
+    --         exports['qb-core']:HideText()
+    --         inStash = false
+    --     end
+    -- end)
 
     -- Police Trash
-    local trashZones = {}
-    for _, v in pairs(Config.Locations["trash"]) do
-        trashZones[#trashZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 1, 1.75, {
-            name="box_zone",
-            debugPoly = false,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        })
-    end
+    -- local trashZones = {}
+    -- for _, v in pairs(Config.Locations["trash"]) do
+    --     trashZones[#trashZones+1] = BoxZone:Create(
+    --         vector3(vector3(v.x, v.y, v.z)), 1, 1.75, {
+    --         name="box_zone",
+    --         debugPoly = false,
+    --         minZ = v.z - 1,
+    --         maxZ = v.z + 1,
+    --     })
+    -- end
 
-    local trashCombo = ComboZone:Create(trashZones, {name = "trashCombo", debugPoly = false})
-    trashCombo:onPlayerInOut(function(isPointInside)
-        if isPointInside then
-            inTrash = true
-            if onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.trash_enter'),'left')
-            end
-        else
-            inTrash = false
-            exports['qb-core']:HideText()
-        end
-    end)
+    -- local trashCombo = ComboZone:Create(trashZones, {name = "trashCombo", debugPoly = false})
+    -- trashCombo:onPlayerInOut(function(isPointInside)
+    --     if isPointInside then
+    --         inTrash = true
+    --         if onDuty then
+    --             exports['qb-core']:DrawText(Lang:t('info.trash_enter'),'left')
+    --         end
+    --     else
+    --         inTrash = false
+    --         exports['qb-core']:HideText()
+    --     end
+    -- end)
 
-    -- Fingerprints
-    local fingerprintZones = {}
-    for _, v in pairs(Config.Locations["fingerprint"]) do
-        fingerprintZones[#fingerprintZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 2, 1, {
-            name="box_zone",
-            debugPoly = false,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        })
-    end
+    -- -- Fingerprints
+    -- local fingerprintZones = {}
+    -- for _, v in pairs(Config.Locations["fingerprint"]) do
+    --     fingerprintZones[#fingerprintZones+1] = BoxZone:Create(
+    --         vector3(vector3(v.x, v.y, v.z)), 2, 1, {
+    --         name="box_zone",
+    --         debugPoly = false,
+    --         minZ = v.z - 1,
+    --         maxZ = v.z + 1,
+    --     })
+    -- end
 
-    local fingerprintCombo = ComboZone:Create(fingerprintZones, {name = "fingerprintCombo", debugPoly = false})
-    fingerprintCombo:onPlayerInOut(function(isPointInside)
-        if isPointInside then
-            inFingerprint = true
-            if onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.scan_fingerprint'),'left')
-            end
-        else
-            inFingerprint = false
-            exports['qb-core']:HideText()
-        end
-    end)
+    -- local fingerprintCombo = ComboZone:Create(fingerprintZones, {name = "fingerprintCombo", debugPoly = false})
+    -- fingerprintCombo:onPlayerInOut(function(isPointInside)
+    --     if isPointInside then
+    --         inFingerprint = true
+    --         if onDuty then
+    --             exports['qb-core']:DrawText(Lang:t('info.scan_fingerprint'),'left')
+    --         end
+    --     else
+    --         inFingerprint = false
+    --         exports['qb-core']:HideText()
+    --     end
+    -- end)
 
-    -- Armoury
-    local armouryZones = {}
-    for _, v in pairs(Config.Locations["armory"]) do
-        armouryZones[#armouryZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 5, 1, {
-            name="box_zone",
-            debugPoly = false,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        })
-    end
+    -- -- Armoury
+    -- local armouryZones = {}
+    -- for _, v in pairs(Config.Locations["armory"]) do
+    --     armouryZones[#armouryZones+1] = BoxZone:Create(
+    --         vector3(vector3(v.x, v.y, v.z)), 5, 1, {
+    --         name="box_zone",
+    --         debugPoly = false,
+    --         minZ = v.z - 1,
+    --         maxZ = v.z + 1,
+    --     })
+    -- end
 
-    local armouryCombo = ComboZone:Create(armouryZones, {name = "armouryCombo", debugPoly = false})
-    armouryCombo:onPlayerInOut(function(isPointInside)
-        if isPointInside then
-            inAmoury = true
-            if onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.enter_armory'),'left')
-            end
-        else
-            inAmoury = false
-            exports['qb-core']:HideText()
-        end
-    end)
+    -- local armouryCombo = ComboZone:Create(armouryZones, {name = "armouryCombo", debugPoly = false})
+    -- armouryCombo:onPlayerInOut(function(isPointInside)
+    --     if isPointInside then
+    --         inAmoury = true
+    --         if onDuty then
+    --             exports['qb-core']:DrawText(Lang:t('info.enter_armory'),'left')
+    --         end
+    --     else
+    --         inAmoury = false
+    --         exports['qb-core']:HideText()
+    --     end
+    -- end)
 
     -- Helicopter
     local helicopterZones = {}
@@ -848,78 +847,78 @@ CreateThread(function()
     end)
 end)
 
--- Personal Stash Thread
-CreateThread(function ()
-    Wait(1000)
-    while true do
-        local sleep = 1000
-        if inStash and PlayerJob.name == "police" then
-            if onDuty then sleep = 5 end
-            if IsControlJustReleased(0, 38) then
-                TriggerServerEvent("inventory:server:OpenInventory", "stash", "policestash_"..QBCore.Functions.GetPlayerData().citizenid)
-                TriggerEvent("inventory:client:SetCurrentStash", "policestash_"..QBCore.Functions.GetPlayerData().citizenid)
-            end
-        else
-            sleep = 1000
-        end
-        Wait(sleep)
-    end
-end)
+-- -- Personal Stash Thread
+-- CreateThread(function ()
+--     Wait(1000)
+--     while true do
+--         local sleep = 1000
+--         if inStash and PlayerJob.name == "police" then
+--             if onDuty then sleep = 5 end
+--             if IsControlJustReleased(0, 38) then
+--                 TriggerServerEvent("inventory:server:OpenInventory", "stash", "policestash_"..QBCore.Functions.GetPlayerData().citizenid)
+--                 TriggerEvent("inventory:client:SetCurrentStash", "policestash_"..QBCore.Functions.GetPlayerData().citizenid)
+--             end
+--         else
+--             sleep = 1000
+--         end
+--         Wait(sleep)
+--     end
+-- end)
 
--- Police Trash Thread
-CreateThread(function ()
-    Wait(1000)
-    while true do
-        local sleep = 1000
-        if inTrash and PlayerJob.name == "police" then
-            if onDuty then sleep = 5 end
-            if IsControlJustReleased(0, 38) then
-                TriggerServerEvent("inventory:server:OpenInventory", "stash", "policetrash", {
-                    maxweight = 4000000,
-                    slots = 300,
-                })
-                TriggerEvent("inventory:client:SetCurrentStash", "policetrash")
-            end
-        else
-            sleep = 1000
-        end
-        Wait(sleep)
-    end
-end)
+-- -- Police Trash Thread
+-- CreateThread(function ()
+--     Wait(1000)
+--     while true do
+--         local sleep = 1000
+--         if inTrash and PlayerJob.name == "police" then
+--             if onDuty then sleep = 5 end
+--             if IsControlJustReleased(0, 38) then
+--                 TriggerServerEvent("inventory:server:OpenInventory", "stash", "policetrash", {
+--                     maxweight = 4000000,
+--                     slots = 300,
+--                 })
+--                 TriggerEvent("inventory:client:SetCurrentStash", "policetrash")
+--             end
+--         else
+--             sleep = 1000
+--         end
+--         Wait(sleep)
+--     end
+-- end)
 
--- Fingerprint Thread
-CreateThread(function ()
-    Wait(1000)
-    while true do
-        local sleep = 1000
-        if inFingerprint and PlayerJob.name == "police" then
-            if onDuty then sleep = 5 end
-            if IsControlJustReleased(0, 38) then
-                TriggerEvent("qb-police:client:scanFingerPrint")
-            end
-        else
-            sleep = 1000
-        end
-        Wait(sleep)
-    end
-end)
+-- -- Fingerprint Thread
+-- CreateThread(function ()
+--     Wait(1000)
+--     while true do
+--         local sleep = 1000
+--         if inFingerprint and PlayerJob.name == "police" then
+--             if onDuty then sleep = 5 end
+--             if IsControlJustReleased(0, 38) then
+--                 TriggerEvent("qb-police:client:scanFingerPrint")
+--             end
+--         else
+--             sleep = 1000
+--         end
+--         Wait(sleep)
+--     end
+-- end)
 
--- Armoury Thread
-CreateThread(function ()
-    Wait(1000)
-    while true do
-        local sleep = 1000
-        if inAmoury and PlayerJob.name == "police" then
-            if onDuty then sleep = 5 end
-            if IsControlJustReleased(0, 38) then
-                TriggerEvent("qb-police:client:openArmoury")
-            end
-        else
-            sleep = 1000
-        end
-        Wait(sleep)
-    end
-end)
+-- -- Armoury Thread
+-- CreateThread(function ()
+--     Wait(1000)
+--     while true do
+--         local sleep = 1000
+--         if inAmoury and PlayerJob.name == "police" then
+--             if onDuty then sleep = 5 end
+--             if IsControlJustReleased(0, 38) then
+--                 TriggerEvent("qb-police:client:openArmoury")
+--             end
+--         else
+--             sleep = 1000
+--         end
+--         Wait(sleep)
+--     end
+-- end)
 
 -- Helicopter Thread
 CreateThread(function ()
@@ -975,3 +974,174 @@ CreateThread(function ()
         Wait(sleep)
     end
 end)
+
+exports['qb-target']:AddBoxZone("policetoggleduty", vector3(441.8, -981.89, 30.69), 1, 0.3, {
+    name = "policetoggleduty",
+    heading = 0,
+    debugPoly = false,
+    minZ = 30.00,
+    maxZ = 31.49,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fas fa-user-check",
+            event = "qb-policejob:ToggleDuty",
+            label = "Toggle Duty",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policelocker", vector3(461.97, -995.5, 30.72), 4.5, 1, {
+    name = "policelocker",
+    heading = 270,
+    debugPoly = false,
+    minZ = 28.52,
+    maxZ = 32.52,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-box-archive",
+            event = "qb-policejob:openlocker",
+            label = "Open Locker",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policelocker2", vector3(461.92, -1000.3, 31.13), 4.5, 0.7, {
+    name = "policelocker2",
+    heading = 270,
+    debugPoly = false,
+    minZ = 28.52,
+    maxZ = 32.52,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-box-archive",
+            event = "qb-policejob:openlocker",
+            label = "Open Locker",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policearmory", vector3(482.54, -994.8, 30.69), 1, 0.5, {
+    name = "policearmory",
+    heading = 270,
+    debugPoly = false,
+    minZ = 27.69,
+    maxZ = 31.69,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-box-archive",
+            event = "qb-police:client:openArmoury",
+            label = "Open Armory",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policetrash", vector3(471.99, -1002.45, 30.69), 0.5, 0.5, {
+    name = "policetrash",
+    heading = 305,
+    debugPoly = false,
+    minZ = 26.69,
+    maxZ = 30.69,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-trash",
+            event = "qb-policejob:opentrash",
+            label = "Open Trash",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policetrash", vector3(473.95, -1014.34, 26.27), 2.5, 1.5, {
+    name = "policetrash",
+    heading = 270,
+    debugPoly = false,
+    minZ = 22.67,
+    maxZ = 26.67,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-fingerprint",
+            event = "qb-police:client:scanFingerPrint",
+            label = "Check Fingerprints",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policeevidence1", vector3(475.89, -995.26, 26.27), 5, 1, {
+    name = "policeevidence1",
+    heading = 0,
+    debugPoly = false,
+    minZ = 24.07,
+    maxZ = 28.07,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-box-archive",
+            event = "qb-policejob:evidence1",
+            label = "Open Evidence Drawer 1",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policeevidence2", vector3(473.91, -995.3, 26.27), 5, 1, {
+    name = "policeevidence2",
+    heading = 0,
+    debugPoly = false,
+    minZ = 24.07,
+    maxZ = 28.07,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-box-archive",
+            event = "qb-policejob:evidence2",
+            label = "Open Evidence Drawer 2",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
+
+exports['qb-target']:AddBoxZone("policeevidence3", vector3(471.9, -995.36, 26.27), 5, 1, {
+    name = "policeevidence3",
+    heading = 0,
+    debugPoly = false,
+    minZ = 24.07,
+    maxZ = 28.07,
+}, {
+    options = {
+        {
+            type = "client",
+            icon = "fa-solid fa-box-archive",
+            event = "qb-policejob:evidence3",
+            label = "Open Evidence Drawer 3",
+            job = "police",
+        }
+    },
+    distance = 1.5
+})
