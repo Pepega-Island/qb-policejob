@@ -17,43 +17,76 @@ Config.LicenseRank = 2
 Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
 Config.Locations = {
     ["duty"] = {
-        [1] = vector3(440.085, -974.924, 30.689),
-        [2] = vector3(-449.811, 6012.909, 31.815),
+        -- [1] = vector3(440.085, -974.924, 30.689),
+        -- [2] = vector3(-449.811, 6012.909, 31.815),
     },
     ["vehicle"] = {
-        [1] = vector4(448.159, -1017.41, 28.562, 90.654),
-        [2] = vector4(471.13, -1024.05, 28.17, 274.5),
-        [3] = vector4(-455.39, 6002.02, 31.34, 87.93),
+        [1] = vector4(446.17, -988.82, 25.34, 269.2),
+        [2] = vector4(445.95, -994.11, 25.34, 270.02),
+        [3] = vector4(436.9, -994.43, 25.34, 89.92),
+        --paleto--
+        [4] = vector4(-459.48, 6001.99, 31.34, 46.43),
+        --- sendy---
+        [5] = vector4(1860.22, 3677.08, 33.65, 120.34),
+        ---FIB---
+        [6] = vector4(2534.79, -363.25, 92.99, 141.13),
+        [7] = vector4(2533.83, -402.12, 92.99, 220.99),
+        [8] = vector4(2483.18, -439.95, 92.99, 94.97),
+        [9] = vector4(2484.02, -328.66, 92.99, 350.07),
+        -- LSPD -- NOCHMAL
+        [10] = vector4(436.73, -988.79, 25.34, 90.34),
     },
     ["stash"] = {
-        [1] = vector3(453.075, -980.124, 30.889),
+        -- [1] = vector3(482.54, -995.3, 30.69),
+        ---FIB---
+        [1] = vector3(2487.35, -377.62, 82.69), -- timmy
+        [2] = vector3(2487.32, -377.05, 81.69), -- timmy
+        [3] = vector3(2528.33, -340.14, 100.89), -- timmy
     },
     ["impound"] = {
-        [1] = vector4(436.68, -1007.42, 27.32, 180.0),
-        [2] = vector4(-436.14, 5982.63, 31.34, 136.0),
+        [1] = vector4(462.93, -1019.6, 28.11, 86.48),
+        ---FIB---
+           [2] = vector4(2499.53, -331.46, 92.99, 350.92),
+           [3] = vector4(2453.88, -397.38, 92.99, 7.95),
+           [4] = vector4(2499.38, -437.14, 92.99, 164.16),
     },
     ["helicopter"] = {
         [1] = vector4(449.168, -981.325, 43.691, 87.234),
+        --- paleto---
         [2] = vector4(-475.43, 5988.353, 31.716, 31.34),
+        ---FIB---
+        [3] = vector4(2510.65, -342.08, 118.19, 305.06),
+        [4] = vector4(2511.17, -426.78, 118.33, 238.4),
     },
     ["armory"] = {
-        [1] = vector3(462.23, -981.12, 30.68),
+        -- [1] = vector3(485.47, -995.49, 30.69),
+        ---fib---
+        [1] = vector3(2487.32, -377.05, 81.69),
+        [2] = vector3(2528.33, -340.14, 100.89),
     },
     ["trash"] = {
-        [1] = vector3(439.0907, -976.746, 30.776),
+        -- [1] = vector3(439.0907, -976.746, 30.776),
     },
     ["fingerprint"] = {
-        [1] = vector3(460.9667, -989.180, 24.92),
+        -- [1] = vector3(474.72, -1014.00, 26.30),
+        ---FIB---
+        [1] = vector3(2510.33, -334.89, 105.69),
+        [2] = vector3(2515.76, -327.45, 105.69),
     },
     ["evidence"] = {
-        [1] = vector3(442.1722, -996.067, 30.689),
-        [2] = vector3(451.7031, -973.232, 30.689),
-        [3] = vector3(455.1456, -985.462, 30.689),
+        -- [1] = vector3(472.76, -993.91, 26.27),
+        -- [2] = vector3(474.7, -996.51, 26.27),
+        -- [3] = vector3(474.97, -994.28, 26.27),
+        ---FIB---
+        [1] = vector3(2510.41, -329.75, 101.89),
+        [2] = vector3(2519.96, -325.81, 101.89),
+        [3] = vector3(2527.58, -319.71, 101.89),
     },
     ["stations"] = {
         [1] = {label = "Police Station", coords = vector4(428.23, -984.28, 29.76, 3.5)},
         [2] = {label = "Prison", coords = vector4(1845.903, 2585.873, 45.672, 272.249)},
         [3] = {label = "Police Station Paleto", coords = vector4(-451.55, 6014.25, 31.716, 223.81)},
+        [4] = {label = "FIB Station north", coords =  vector4(2545.85, -384.46, 92.99, 338.73)},
     },
 }
 
@@ -102,61 +135,101 @@ Config.SecurityCameras = {
 }
 
 Config.AuthorizedVehicles = {
-	-- Grade 0
+	-- Grade 0 - - Academic policeman
 	[0] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+		["pdimpala"] = "Rang 0: Impala",
 	},
-	-- Grade 1
+	-- Grade 1 - - Cop
 	[1] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
-
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
 	},
-	-- Grade 2
+	-- Grade 2 - - Senior Cop
 	[2] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
 	},
-	-- Grade 3
+	-- Grade 3 - - Sergeant
 	[3] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
 	},
-	-- Grade 4
+	-- Grade 4 - - Officer
 	[4] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
+        ["pdtruck"] = "Rang 4: Raptor",
+		["pdcharger"] = "Rang 4: Charger",
+	},
+    -- Grade 5 - - Senior Officer
+	[5] = {
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
+        ["pdtruck"] = "Rang 4: Raptor",
+		["pdcharger"] = "Rang 4: Charger",
+        ["abshel"] = "Rang 5: Mustang",
+	},
+    -- Grade 6 - - Commander of Officer
+	[6] = {
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
+        ["pdtruck"] = "Rang 4: Raptor",
+		["pdcharger"] = "Rang 4: Charger",
+        ["abshel"] = "Rang 5: Mustang",
+	},
+    -- Grade 7 - - Supervising police
+	[7] = {
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
+        ["pdtruck"] = "Rang 4: Raptor",
+		["pdcharger"] = "Rang 4: Charger",
+        ["abshel"] = "Rang 5: Mustang",
+	},
+    -- Grade 8 - - Lieutenant Police
+	[8] = {
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
+        ["pdtruck"] = "Rang 4: Raptor",
+		["pdcharger"] = "Rang 4: Charger",
+        ["abshel"] = "Rang 5: Mustang",
+	},
+    -- Grade 9 - - Police Chief
+	[9] = {
+		["pdimpala"] = "Rang 0: Impala",
+		["pdcvpi"] = "Rang 1: CVPI",
+        ["pdfpiu"] = "Rang 2: Explorer",
+		["pdmoto"] = "Rang 2: Motorrad",
+        ["pdtahoe"] = "Rang 3: Tahoe",
+		["pdtaurus"] = "Rang 3: Taurus",
+        ["pdtruck"] = "Rang 4: Raptor",
+		["pdcharger"] = "Rang 4: Charger",
+        ["abshel"] = "Rang 5: Mustang",
 	}
 }
 
@@ -187,7 +260,7 @@ Config.Radars = {
 
 Config.CarItems = {
     [1] = {
-        name = "heavyarmor",
+        name = "armor",
         amount = 2,
         info = {},
         type = "item",
@@ -215,8 +288,8 @@ Config.Items = {
     items = {
         [1] = {
             name = "weapon_pistol",
-            price = 0,
-            amount = 1,
+            price = 2500,
+            amount = 100,
             info = {
                 serie = "",
                 attachments = {
@@ -225,23 +298,23 @@ Config.Items = {
             },
             type = "weapon",
             slot = 1,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [2] = {
             name = "weapon_stungun",
-            price = 0,
-            amount = 1,
+            price = 2000,
+            amount = 100,
             info = {
                 serie = "",
             },
             type = "weapon",
             slot = 2,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [3] = {
             name = "weapon_pumpshotgun",
-            price = 0,
-            amount = 1,
+            price = 5500,
+            amount = 50,
             info = {
                 serie = "",
                 attachments = {
@@ -250,12 +323,12 @@ Config.Items = {
             },
             type = "weapon",
             slot = 3,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {7, 8, 9}
         },
         [4] = {
             name = "weapon_smg",
-            price = 0,
-            amount = 1,
+            price = 3000,
+            amount = 100,
             info = {
                 serie = "",
                 attachments = {
@@ -265,12 +338,12 @@ Config.Items = {
             },
             type = "weapon",
             slot = 4,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {3, 4, 5, 6, 7, 8, 9}
         },
         [5] = {
             name = "weapon_carbinerifle",
-            price = 0,
-            amount = 1,
+            price = 3750,
+            amount = 100,
             info = {
                 serie = "",
                 attachments = {
@@ -280,121 +353,162 @@ Config.Items = {
             },
             type = "weapon",
             slot = 5,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {6, 7, 8, 9}
         },
         [6] = {
             name = "weapon_nightstick",
-            price = 0,
-            amount = 1,
+            price = 350,
+            amount = 100,
             info = {},
             type = "weapon",
             slot = 6,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [7] = {
             name = "pistol_ammo",
-            price = 0,
-            amount = 5,
+            price = 350,
+            amount = 500,
             info = {},
             type = "item",
             slot = 7,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [8] = {
             name = "smg_ammo",
-            price = 0,
-            amount = 5,
+            price = 400,
+            amount = 500,
             info = {},
             type = "item",
             slot = 8,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {3, 4, 5, 6, 7, 8, 9}
         },
         [9] = {
             name = "shotgun_ammo",
-            price = 0,
-            amount = 5,
+            price = 500,
+            amount = 500,
             info = {},
             type = "item",
             slot = 9,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {7, 8, 9}
         },
         [10] = {
             name = "rifle_ammo",
-            price = 0,
-            amount = 5,
+            price = 450,
+            amount = 500,
             info = {},
             type = "item",
             slot = 10,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {6, 7, 8, 9}
         },
         [11] = {
             name = "handcuffs",
-            price = 0,
-            amount = 1,
+            price = 350,
+            amount = 500,
             info = {},
             type = "item",
             slot = 11,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [12] = {
             name = "weapon_flashlight",
-            price = 0,
-            amount = 1,
+            price = 350,
+            amount = 500,
             info = {},
             type = "weapon",
             slot = 12,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [13] = {
             name = "empty_evidence_bag",
-            price = 0,
-            amount = 50,
+            price = 1,
+            amount = 500,
             info = {},
             type = "item",
             slot = 13,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [14] = {
             name = "police_stormram",
-            price = 0,
-            amount = 50,
+            price = 500,
+            amount = 500,
             info = {},
             type = "item",
             slot = 14,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [15] = {
             name = "armor",
-            price = 0,
-            amount = 50,
+            price = 850,
+            amount = 100,
             info = {},
             type = "item",
             slot = 15,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [16] = {
             name = "radio",
-            price = 0,
-            amount = 50,
+            price = 200,
+            amount = 500,
             info = {},
             type = "item",
             slot = 16,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
         },
         [17] = {
             name = "heavyarmor",
-            price = 0,
-            amount = 50,
+            price = 2000,
+            amount = 100,
             info = {},
             type = "item",
             slot = 17,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+        },
+        [18] = {
+            name = "pdbadge",
+            price = 250,
+            amount = 500,
+            info = {},
+            type = "item",
+            slot = 18,
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+        },
+        [19] = {
+            name = "advancedrepairkit",
+            price = 2850,
+            amount = 500,
+            info = {},
+            type = "item",
+            slot = 19,
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+        },
+        [20] = {
+            name = "weapon_pistol_mk2",
+            price = 3500,
+            amount = 100,
+            info = {
+                serie = "",
+                attachments = {
+                    {component = "COMPONENT_AT_PI_FLSH", label = "Flashlight"},
+                }
+            },
+            type = "weapon",
+            slot = 20,
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+        },
+        [21] = {
+            name = "parachute",
+            price = 2000,
+            amount = 50,
+            info = {},
+            type = "item",
+            slot = 21,
+            authorizedJobGrades = {1, 2, 3, 4, 5, 6, 7, 8, 9}
         }
     }
 }
 
 Config.VehicleSettings = {
-    ["car1"] = { --- Model name
+    ["abshel"] = { --- Model name
         ["extras"] = {
             ["1"] = true, -- on/off
             ["2"] = true,

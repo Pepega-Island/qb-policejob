@@ -371,32 +371,107 @@ RegisterNetEvent('police:client:GetKidnappedDragger', function()
 end)
 
 RegisterNetEvent('police:client:GetCuffed', function(playerId, isSoftcuff)
-    local ped = PlayerPedId()
-    if not isHandcuffed then
+    local attemps = 0
+    if attemps <= 3 then
+        if not isHandcuffed then
+            QBCore.Functions.GetPlayerData(function(PlayerData)
+                if (not PlayerData.metadata["inlaststand"] and not PlayerData.metadata["isdead"]) then
+                    exports['ps-ui']:Circle(function(success)
+                        if not success then
+                            isHandcuffed = true
+                            TriggerServerEvent("police:server:SetHandcuffStatus", true)
+                            ClearPedTasksImmediately(PlayerPedId())
+                            if GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey('WEAPON_UNARMED') then
+                                SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true)
+                            end
+                            if not isSoftcuff then
+                                cuffType = 16
+                                GetCuffedAnimation(playerId)
+                                QBCore.Functions.Notify("You are cuffed!")
+                            else
+                                cuffType = 49
+                                GetCuffedAnimation(playerId)
+                                QBCore.Functions.Notify("You are cuffed, but you can walk")
+                            end
+                        else
+                            QBCore.Functions.Notify("You managed to break free", "success")
+                            TriggerServerEvent('police:server:cuffstruggle')
+                            attemps = attemps + 1
+                        end
+                    end, 1, math.random(5,8))
+                else
+                    isHandcuffed = true
+                    TriggerServerEvent("police:server:SetHandcuffStatus", true)
+                    ClearPedTasksImmediately(PlayerPedId())
+                    if GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey('WEAPON_UNARMED') then
+                        SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true)
+                    end
+                    if not isSoftcuff then
+                        cuffType = 16
+                        GetCuffedAnimation(playerId)
+                        QBCore.Functions.Notify("You are cuffed!")
+                    else
+                        cuffType = 49
+                        GetCuffedAnimation(playerId)
+                        QBCore.Functions.Notify("You are cuffed, but you can walk")
+                    end
+                end
+            end)
+        else
+            isHandcuffed = false
+            isEscorted = false
+            TriggerEvent('hospital:client:isEscorted', isEscorted)
+            DetachEntity(PlayerPedId(), true, false)
+            TriggerServerEvent("police:server:SetHandcuffStatus", false)
+            ClearPedTasksImmediately(PlayerPedId())
+            QBCore.Functions.Notify("You are uncuffed!")
+            amount = 0
+        end
+    else 
         isHandcuffed = true
         TriggerServerEvent("police:server:SetHandcuffStatus", true)
-        ClearPedTasksImmediately(ped)
-        if GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then
-            SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        ClearPedTasksImmediately(PlayerPedId())
+        if GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey('WEAPON_UNARMED') then
+            SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true)
         end
         if not isSoftcuff then
             cuffType = 16
             GetCuffedAnimation(playerId)
-            QBCore.Functions.Notify(Lang:t("info.cuff"), 'primary')
+            QBCore.Functions.Notify("You are cuffed!")
         else
             cuffType = 49
             GetCuffedAnimation(playerId)
-            QBCore.Functions.Notify(Lang:t("info.cuffed_walk"), 'primary')
+            QBCore.Functions.Notify("You are cuffed, but you can walk")
         end
-    else
-        isHandcuffed = false
-        isEscorted = false
-        TriggerEvent('hospital:client:isEscorted', isEscorted)
-        DetachEntity(ped, true, false)
-        TriggerServerEvent("police:server:SetHandcuffStatus", false)
-        ClearPedTasksImmediately(ped)
-        TriggerServerEvent("InteractSound_SV:PlayOnSource", "Uncuff", 0.2)
-        QBCore.Functions.Notify(Lang:t("success.uncuffed"),"success")
+    end
+end)
+
+RegisterNetEvent('police:client:rifleback', function()
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    if GetEntityModel(vehicle) == `pdcvpi` or GetEntityModel(vehicle) == `pdimpala` or GetEntityModel(vehicle) == `pdtahoe` or GetEntityModel(vehicle) == `pdfpiu` or GetEntityModel(vehicle) == `pdtaurus` or GetEntityModel(vehicle) == `pdcharger` then
+        if GetVehicleClass(vehicle) == 18 then
+            local circles = math.random(3, 6)
+            local seconds = math.random(8, 12)
+            exports['ps-ui']:Circle(function(success)
+                if success then
+                    QBCore.Functions.Progressbar("open-rifle-rack", "Unlocking Weapon Rack...", 2500, false, true, {
+                        disableMovement = false,
+                        disableCarMovement = false,
+                        disableMouse = false,
+                        disableCombat = true,
+                    }, {}, {}, {}, function() -- Done
+                        TriggerServerEvent("inventory:server:OpenInventory", "stash", 'Riflerack_'..QBCore.Functions.GetPlate(vehicle), {maxweight = 46000, slots = 4})
+                        TriggerEvent("inventory:client:SetCurrentStash", 'Riflerack_'..QBCore.Functions.GetPlate(vehicle))
+                    end, function() --< This is where the error is
+                        QBCore.Functions.Notify("Canceled..", "error")
+                    end, "fa-solid fa-lock-keyhole-open")
+                else
+                    QBCore.Functions.Notify("You failed, LOL", "error")
+                end
+            end, math.random(3,6), math.random(7,10))
+        else
+            QBCore.Functions.Notify("Thats not a Police Vehicle!", "error")
+        end
     end
 end)
 
